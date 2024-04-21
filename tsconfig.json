@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "baseUrl": "./src",
+    "types": ["cypress", "node"],
+    "paths": {
+      "@assets": ["assets/"],
+      "@assets/*": ["assets/*"],
+
+      "@components": ["components/"],
+      "@components/*": ["components/*"],
+
+      "@hooks": ["hooks/"],
+      "@hooks/*": ["hooks/*"],
+
+      "@pages": ["pages/"],
+      "@pages/*": ["pages/*"],
+
+      "@redux": ["redux/"],
+      "@redux/*": ["redux/*"],
+
+      "@routers": ["routers/"],
+      "@routers/*": ["routers/*"],
+
+      "@types": ["types/"],
+      "@types/*": ["types/*"],
+
+      "@utils": ["utils/"],
+      "@utils/*": ["utils/*"],
+
+      "@services": ["services/"],
+      "@services/*": ["services/*"],
+
+      "@mock": ["mock/"],
+      "@mock/*": ["mock/*"]
+    },
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src/**/*, **/*.ts", "**/*.tsx", "cypress", "src/components/ui/header/ui/search/wrapper/index.ts", "src/hooks/debounce/index.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

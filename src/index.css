@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+a:hover {
+  color: inherit;
+}
+
+@media screen and (max-width: 420px) {
+  .splide__pagination {
+    display: none !important;
+  }
+}
+
+.react-time-picker input {
+  outline: none;
+}
+.react-time-picker__wrapper {
+  border: none !important;
+}
+.p-image-toolbar {
+  color: white;
+  padding: 10px;
+}
+.p-image-preview {
+  width: 700px;
+}
+.image-gallery-slides {
+  border-radius: 8px
+}
+.image-gallery-bullets .image-gallery-bullet {
+  padding: 3px
+}
