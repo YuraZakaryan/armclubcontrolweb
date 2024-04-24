@@ -1,15 +1,15 @@
 import { Breadcrumb, Loader, MissingCards } from '@components/ui';
 import { CardList, Main } from '@components/wrapper';
 import { useAppDispatch, useAppSelector } from '@hooks';
-import { fetchTopRatedClubsThunk } from '@redux/http';
+import { fetchByTimerClubsThunk } from '@redux/http';
 import { DEFAULT_PER_PAGE } from '@utils/constants';
 import { Paginator } from 'primereact/paginator';
 import React from 'react';
 import { TClub } from '@redux/types';
 
-export const TopRatedClubsScreen = () => {
+export const ByTimersClubScreen = () => {
   const dispatch = useAppDispatch();
-  const { topRatedClubs } = useAppSelector((state) => state.club);
+  const { byTimerClubs } = useAppSelector((state) => state.club);
 
   const [currentPage, setCurrentPage] = React.useState<number>(1);
   const [perPage, setPerPage] = React.useState<number>(DEFAULT_PER_PAGE);
@@ -20,16 +20,16 @@ export const TopRatedClubsScreen = () => {
   };
 
   const fetchClubs = React.useCallback(() => {
-    dispatch(fetchTopRatedClubsThunk({ limit: perPage, skip: (currentPage - 1) * perPage, byRating: true }));
+    dispatch(fetchByTimerClubsThunk({ limit: perPage, skip: (currentPage - 1) * perPage, sortByTimers: true }));
   }, [dispatch, perPage, currentPage]);
 
   React.useEffect((): void => {
     fetchClubs();
   }, [fetchClubs]);
 
-  const isLoading: boolean | null = topRatedClubs.isLoading;
-  const totalItems: number = topRatedClubs.totalItems;
-  const items: TClub[] = topRatedClubs.items;
+  const isLoading: boolean | null = byTimerClubs.isLoading;
+  const totalItems: number = byTimerClubs.totalItems;
+  const items: TClub[] = byTimerClubs.items;
 
   return isLoading || isLoading === null ? (
     <Loader />

@@ -79,16 +79,17 @@ export const Sidebar = () => {
             </>
           ) : user ? (
             <>
-              <div className="w-full">
-                <SideBarMenu label="Մենյու" list={menuGeneralElements} className="laptop-hd-min:mt-5" />
-                <SidebarDropdown
-                  title="Կատեգորիա"
-                  state={dropdownOpen.categories}
-                  iconClassName={dropdownOpen.categories ? 'rotate-180' : ''}
-                  handleClick={() => toggleDropdown('categories')}
-                >
-                  <SideBarMenu label="Մենյու" list={categoriesElements} className="text-sm" iconSize={18} />
-                </SidebarDropdown>
+              <div className="flex w-full flex-col gap-3">
+                <SideBarMenu showLabel label="Ընդհանուր" list={menuGeneralElements} className="laptop-hd-min:mt-5" />
+                <SideBarMenu showLabel label="Կատեգորիա" list={categoriesElements} iconSize={18} />
+                {/*<SidebarDropdown*/}
+                {/*  title="Կատեգորիա"*/}
+                {/*  state={dropdownOpen.categories}*/}
+                {/*  iconClassName={dropdownOpen.categories ? 'rotate-180' : ''}*/}
+                {/*  handleClick={() => toggleDropdown('categories')}*/}
+                {/*>*/}
+                {/*  <SideBarMenu label="Մենյու" list={categoriesElements} className="text-sm" iconSize={18} />*/}
+                {/*</SidebarDropdown>*/}
               </div>
 
               <SideBarMenu
@@ -97,6 +98,7 @@ export const Sidebar = () => {
                 className={'relative bottom-0'}
                 activated={user.activated}
               />
+
               <SideBarMenu
                 label="Ընդհանուր"
                 list={menuSignedWithClubAdminElements}

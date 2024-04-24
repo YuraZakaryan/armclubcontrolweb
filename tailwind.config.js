@@ -20,7 +20,7 @@ export default {
         'laptop-hd-min': { min: '1280px' },
       },
       width: {
-        'swiper-size': 'calc(100% - 200px)',
+        'swiper-size': 'calc(100% - 280px)',
       },
       translate: {
         center: '-50%',

@@ -1,9 +1,9 @@
 import { $authHost, meThunk, myClubsFetchThunk } from '@redux/http';
-import { IFetchClubsParams, TClub, TFetchParams } from '@redux/types';
+import { IFetchClubsParams, TClub, TFetchParams, TLocationReq } from '@redux/types';
 import { TRequestIds } from '@redux/types/dialog';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { handleAxiosError } from '@utils/request-error-handler';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export const fetchClubsThunk = createAsyncThunk(
   'fetch/clubs',
@@ -94,6 +94,72 @@ export const fetchTopRatedClubsThunk = createAsyncThunk(
 
       if (byRating !== undefined) {
         url += `byRating=${true}&`;
+      }
+
+      if (url.endsWith('&')) {
+        url = url.slice(0, -1);
+      }
+
+      const { data } = await $authHost.get(url);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError;
+      return rejectWithValue(handleAxiosError(error));
+    }
+  },
+);
+
+export const fetchByTimerClubsThunk = createAsyncThunk(
+  'fetch-by-timer/clubs',
+  async ({ skip, limit, sortByTimers }: IFetchClubsParams, { rejectWithValue }) => {
+    try {
+      let url: string = 'club/all?';
+
+      if (skip !== undefined) {
+        url += `&skip=${skip}&`;
+      }
+
+      if (limit !== undefined) {
+        url += `limit=${limit}&`;
+      }
+
+      if (sortByTimers !== undefined) {
+        url += `sortByTimers=${true}&`;
+      }
+
+      if (url.endsWith('&')) {
+        url = url.slice(0, -1);
+      }
+
+      const { data } = await $authHost.get(url);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError;
+      return rejectWithValue(handleAxiosError(error));
+    }
+  },
+);
+
+export const fetchByRegionClubsThunk = createAsyncThunk(
+  'fetch-by-region/clubs',
+  async ({ skip, limit, region, city }: IFetchClubsParams, { rejectWithValue }) => {
+    try {
+      let url: string = 'club/all?';
+
+      if (skip !== undefined) {
+        url += `&skip=${skip}&`;
+      }
+
+      if (limit !== undefined) {
+        url += `limit=${limit}&`;
+      }
+
+      if (region && region !== 'yerevan') {
+        url += `region=${region}&`;
+      }
+
+      if (city) {
+        url += `city=${city}&`;
       }
 
       if (url.endsWith('&')) {
@@ -211,6 +277,22 @@ export const deleteClubThunk = createAsyncThunk(
       if (userId) {
         dispatch(myClubsFetchThunk(userId));
       }
+      return data;
+    } catch (err) {
+      const error = err as AxiosError;
+      return rejectWithValue(handleAxiosError(error));
+    }
+  },
+);
+
+export const getLocationByYandex = createAsyncThunk(
+  'get/location',
+  async ({ latitude, longitude }: TLocationReq, { rejectWithValue }) => {
+    try {
+      const KEY = 'e8935908-16f0-4d92-a4e2-c204355f06f8';
+      const { data } = await axios.get(
+        `https://geocode-maps.yandex.ru/1.x/?apikey=${KEY}&format=json&lang=en_RU&geocode=${longitude},${latitude}`,
+      );
       return data;
     } catch (err) {
       const error = err as AxiosError;

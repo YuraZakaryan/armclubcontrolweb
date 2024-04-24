@@ -26,6 +26,7 @@ export type TMenuElement = {
 
 export interface ISideBarMenu extends TClassName {
   label: string;
+  showLabel?: boolean;
   activated?: boolean;
   sidebarItemClassName?: string;
   iconSize?: number;

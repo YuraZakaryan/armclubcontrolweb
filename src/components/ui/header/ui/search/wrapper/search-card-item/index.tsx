@@ -1,20 +1,17 @@
 import { ISearchCardItem } from '@components/ui/header/types';
-import { calculateClubOccupancy } from '@utils';
 import { API_URL } from '@utils/constants';
 import { Image } from 'primereact/image';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const SearchCardItem: React.FC<ISearchCardItem> = React.memo((props) => {
-  const { _id, title, picture, timers } = props;
+  const { _id, title, picture } = props;
 
   const navigate = useNavigate();
 
-  const handleNavigate = () => {
+  const handleNavigate = (): void => {
     navigate(`/club/${_id}`);
   };
-
-  const totalTimersPercent = calculateClubOccupancy(timers);
 
   return (
     <li
@@ -33,7 +30,6 @@ export const SearchCardItem: React.FC<ISearchCardItem> = React.memo((props) => {
           />
           <h3>{title}</h3>
         </section>
-        {timers.length > 0 ? <p>{totalTimersPercent}%</p> : null}
       </button>
     </li>
   );

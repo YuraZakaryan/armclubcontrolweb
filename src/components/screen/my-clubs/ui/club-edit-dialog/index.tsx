@@ -13,7 +13,7 @@ import {
   DialogContentCorrect,
   EditButtonStyled,
   InputMaskWithLabel,
-  SelectField,
+  SelectFormikField,
   SmallWarningText,
   UploadFileWithFormik,
 } from '@components/wrapper';
@@ -209,7 +209,7 @@ export const ClubDialog: React.FC<IClubEditDialog> = React.memo((props) => {
                   </div>
                   <div>
                     <Field
-                      as={SelectField}
+                      as={SelectFormikField}
                       name="region"
                       label="Տարածաշրջան"
                       options={regionOptions}
@@ -219,7 +219,7 @@ export const ClubDialog: React.FC<IClubEditDialog> = React.memo((props) => {
                   </div>
                   <div>
                     <Field
-                      as={SelectField}
+                      as={SelectFormikField}
                       name="city"
                       label="Քաղաք"
                       require={true}

@@ -1,4 +1,4 @@
-import { regionCities } from '@components/screen/club/data';
+import { regionCities, regionOptions } from '@components/screen/club/data';
 import type { TSelectOption } from '@components/screen/club/types';
 import { ClubFavorite } from '@components/wrapper';
 import { useAppSelector } from '@hooks/redux';
@@ -43,8 +43,10 @@ export const InformationClub = () => {
   const citiesForRegion = regionCities[region] || [];
 
   const cityLabel = citiesForRegion.find((option: TSelectOption): boolean => option.value === city)?.label;
+  const regionLabel = regionOptions.find((option: TSelectOption): boolean => option.value === region)?.label;
 
   const displayCityLabel: string = cityLabel || regionCities['yerevan'][0]?.label || 'Քաղաքը նշված չէ';
+  const displayRegion: string = regionLabel ? regionLabel + 'ի մարզ' : '';
 
   return (
     <div className={'flex overflow-hidden rounded-lg tablet-max:flex-col'}>
@@ -91,6 +93,13 @@ export const InformationClub = () => {
               {description ? description : null}
             </p>
             <section className={'flex flex-col gap-2 border-b border-gray-600 pb-3'}>
+              {displayRegion ? (
+                <p>
+                  <span className={'text-secondary'}>Տարածաշրջան։ </span>
+                  <i className="text-text-nav underline">{displayRegion}</i>
+                </p>
+              ) : null}
+
               <p>
                 <span className={'text-secondary'}>Քաղաք։ </span>
                 <i className="text-text-nav underline">{displayCityLabel}</i>

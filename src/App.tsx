@@ -1,5 +1,7 @@
 import { useAppDispatch } from '@hooks';
 import {
+  ByRegionClub,
+  ByTimersClub,
   Club,
   ClubControl,
   FavoriteClubs,
@@ -31,6 +33,8 @@ const App = () => {
       <Route path="/" element={<Root />} errorElement={<NotFound />}>
         <Route path="/" element={<Home />} />
         <Route path="/top-rated" element={<TopRatedClubs />} />
+        <Route path="/by-region" element={<ByRegionClub />} />
+        <Route path="/by-computers" element={<ByTimersClub />} />
         <Route element={<AuthRoute />}>
           <Route path="login" element={<Login />} />
           <Route path="registration" element={<Registration />} />

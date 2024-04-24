@@ -10,3 +10,5 @@ export * from './profile';
 export * from './settings';
 export * from './timer-history';
 export * from './top-rated';
+export * from './by-region';
+export * from './by-timers';

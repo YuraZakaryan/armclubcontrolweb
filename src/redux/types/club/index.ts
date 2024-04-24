@@ -7,6 +7,7 @@ import {
   TTimerHistories,
   TUser,
 } from '@redux/types';
+import { TPlace } from '@types';
 
 export type TFavorite = {
   _id: string;
@@ -54,12 +55,17 @@ export type TSearch = {
   hasMore: boolean;
   content: string;
 };
+export interface ILocation extends TRequestStatus {
+  place: TPlace;
+}
 export type TInitialClubState = {
   club: TClub | null;
   clubs: TItemsWithTotalLength<TClub>;
   search: TSearch;
   searchedClubs: TItemsWithTotalLength<TClub>;
   topRatedClubs: TItemsWithTotalLength<TClub>;
+  byRegionClubs: TItemsWithTotalLength<TClub>;
+  byTimerClubs: TItemsWithTotalLength<TClub>;
   history: TItemsWithTotalLength<TClub>;
   favorites: TItemsWithTotalLength<TClub>;
   addHistory: TRequestStatus;
@@ -67,6 +73,7 @@ export type TInitialClubState = {
   toggleFavorite: TRequestStatus;
   fetchClub: TRequestStatus;
   deleteClub: TRequestStatus;
+  location: ILocation;
 };
 export interface IFetchClubsParams extends TFetchParams {
   region?: string;
@@ -74,4 +81,9 @@ export interface IFetchClubsParams extends TFetchParams {
   title?: string;
   random?: boolean;
   byRating?: boolean;
+  sortByTimers?: boolean;
 }
+export type TLocationReq = {
+  latitude: string;
+  longitude: string;
+};

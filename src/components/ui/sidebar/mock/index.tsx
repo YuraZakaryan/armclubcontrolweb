@@ -5,6 +5,9 @@ import { BsExclamation } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { IoExitOutline, IoStarHalfOutline } from 'react-icons/io5';
 import { MdControlCamera, MdOutlineManageHistory } from 'react-icons/md';
+import { FaMapMarked } from 'react-icons/fa';
+import { IoLogoPlaystation } from 'react-icons/io5';
+import { VscCompassActive } from 'react-icons/vsc';
 
 export const menuGeneralSignOutElements: TMenuElement[] = [{ title: 'Գլխավոր', href: '/', icon: BiHomeAlt2 }];
 
@@ -16,6 +19,9 @@ export const menuGeneralElements: TMenuElement[] = [
 
 export const categoriesElements: TMenuElement[] = [
   { title: 'Բարձր վարկանիշով', href: '/top-rated', icon: IoStarHalfOutline },
+  { title: 'Նախն․ տարածաշրջանից', href: '/by-region', icon: FaMapMarked },
+  { title: 'Ամենաշատը քանակով', href: '/by-computers', icon: IoLogoPlaystation },
+  { title: 'Ակտիվությամբ բարձրները', href: '/by-active', icon: VscCompassActive },
 ];
 
 export const menuSignedElements: TMenuElement[] = [

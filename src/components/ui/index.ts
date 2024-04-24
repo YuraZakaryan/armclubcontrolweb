@@ -11,4 +11,5 @@ export * from './missing-cards';
 export * from './pagination';
 export * from './preloader';
 export * from './sidebar';
+export * from './custom-select';
 export * from './timer-history';

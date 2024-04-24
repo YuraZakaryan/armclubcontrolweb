@@ -40,3 +40,10 @@ a:hover {
 .image-gallery-bullets .image-gallery-bullet {
   padding: 3px
 }
+.slick-prev, .slick-next {
+  font-size: 15px !important;
+}
+
+.slick-prev:before, .slick-next:before  {
+  content: '' !important;
+}

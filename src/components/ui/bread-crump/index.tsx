@@ -9,7 +9,7 @@ export const Breadcrumb: React.FC<TBreadcrumb> = React.memo((props) => {
   return (
     <div className={cn('flex justify-end', className)}>
       <nav>
-        <ul className="flex items-center gap-2 text-text">
+        <ul className="flex items-center gap-2 text-text tablet-max:text-xs">
           <li>
             <Link to="/">Գլխավոր &nbsp;/</Link>
           </li>

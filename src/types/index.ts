@@ -173,3 +173,14 @@ export interface ICustomLoader extends TClassName {
   height?: number;
   width?: number;
 }
+export type TPlace = {
+  region: string;
+  city: string;
+};
+export interface ICustomSelect {
+  name: string;
+  label?: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: Array<TSelectOption>;
+}

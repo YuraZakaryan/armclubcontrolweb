@@ -6,11 +6,13 @@ import { useField } from 'formik';
 import React from 'react';
 import Select from 'react-select';
 
-export const SelectField: React.FC<ISelectField> = React.memo((props) => {
+export const SelectFormikField: React.FC<ISelectField> = React.memo((props) => {
   const { options, name, label, className, require, setFieldValue } = props;
   const [field] = useField(name);
+
+  console.log(field);
   const [selectedOption, setSelectedOption] = React.useState<TSelectOption | null | undefined>(
-    field.value ? options.find((option) => option.value === field.value) : undefined,
+    field.value ? options.find((option): boolean => option.value === field.value) : undefined,
   );
 
   React.useEffect(() => {
@@ -30,7 +32,7 @@ export const SelectField: React.FC<ISelectField> = React.memo((props) => {
         id={name}
         options={[emptyOption, ...options]}
         value={selectedOption || null}
-        onChange={async (option: TSelectOption | null) => {
+        onChange={async (option: TSelectOption | null): Promise<void> => {
           if (option) {
             setSelectedOption(option);
             await setFieldValue(name, option.value);
@@ -71,4 +73,4 @@ export const SelectField: React.FC<ISelectField> = React.memo((props) => {
     </div>
   );
 });
-SelectField.displayName = 'SelectField';
+SelectFormikField.displayName = 'SelectFormikField';

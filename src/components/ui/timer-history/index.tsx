@@ -35,7 +35,7 @@ export const TimerHistory: React.FC<ITimerHistory> = React.memo((props) => {
                 <CustomTableRow key={timer._id}>
                   <CustomTableCell>{index + 1}</CustomTableCell>
                   <CustomTableCell>{timer.title}</CustomTableCell>
-                  <CustomTableCell>{timer.start.slice(0, 5)}</CustomTableCell>
+                  {/*<CustomTableCell>{timer.start.slice(0, 5)}</CustomTableCell>*/}
                   <CustomTableCell>{timer.time}</CustomTableCell>
                   <CustomTableCell>{timer.end.slice(0, 5)}</CustomTableCell>
                   <CustomTableCell>{formattedPrice(timer.price)} դրամ</CustomTableCell>

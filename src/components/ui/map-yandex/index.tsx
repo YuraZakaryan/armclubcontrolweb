@@ -9,6 +9,7 @@ export const MapYandex: React.FC<IMapYandex> = React.memo((props) => {
     center: centerArray,
     zoom: zoom,
   };
+
   return (
     <YMaps>
       <Map

@@ -1,11 +1,14 @@
 import {
   addClubToHistoryThunk,
   deleteClubThunk,
+  fetchByRegionClubsThunk,
+  fetchByTimerClubsThunk,
   fetchClubHistoryThunk,
   fetchClubsThunk,
   fetchClubThunk,
   fetchFavoriteClubsThunk,
   fetchTopRatedClubsThunk,
+  getLocationByYandex,
   searchClubsThunk,
   toggleClubFavoriteThunk,
 } from '@redux/http/club';
@@ -34,6 +37,18 @@ export const initialState: TInitialClubState = {
     isLoading: null,
   },
   topRatedClubs: {
+    items: [],
+    totalItems: 0,
+    isError: false,
+    isLoading: null,
+  },
+  byRegionClubs: {
+    items: [],
+    totalItems: 0,
+    isError: false,
+    isLoading: null,
+  },
+  byTimerClubs: {
     items: [],
     totalItems: 0,
     isError: false,
@@ -69,6 +84,14 @@ export const initialState: TInitialClubState = {
   },
   deleteClub: {
     isLoading: false,
+    isError: false,
+  },
+  location: {
+    place: {
+      region: '',
+      city: '',
+    },
+    isLoading: null,
     isError: false,
   },
 };
@@ -142,6 +165,46 @@ const clubSlice = createSlice({
       })
       .addCase(fetchTopRatedClubsThunk.rejected, (state: TInitialClubState): void => {
         state.topRatedClubs = {
+          items: [],
+          totalItems: 0,
+          isLoading: false,
+          isError: true,
+        };
+      })
+      .addCase(fetchByTimerClubsThunk.fulfilled, (state: TInitialClubState, action) => {
+        state.byTimerClubs = {
+          items: action.payload.items,
+          totalItems: action.payload.totalItems,
+          isLoading: false,
+          isError: false,
+        };
+      })
+      .addCase(fetchByTimerClubsThunk.pending, (state: TInitialClubState): void => {
+        state.byTimerClubs.isLoading = true;
+        state.byTimerClubs.isError = false;
+      })
+      .addCase(fetchByTimerClubsThunk.rejected, (state: TInitialClubState): void => {
+        state.byTimerClubs = {
+          items: [],
+          totalItems: 0,
+          isLoading: false,
+          isError: true,
+        };
+      })
+      .addCase(fetchByRegionClubsThunk.fulfilled, (state: TInitialClubState, action) => {
+        state.byRegionClubs = {
+          items: action.payload.items,
+          totalItems: action.payload.totalItems,
+          isLoading: false,
+          isError: false,
+        };
+      })
+      .addCase(fetchByRegionClubsThunk.pending, (state: TInitialClubState): void => {
+        state.byRegionClubs.isLoading = true;
+        state.byRegionClubs.isError = false;
+      })
+      .addCase(fetchByRegionClubsThunk.rejected, (state: TInitialClubState): void => {
+        state.byRegionClubs = {
           items: [],
           totalItems: 0,
           isLoading: false,
@@ -263,6 +326,35 @@ const clubSlice = createSlice({
           isLoading: false,
           isError: true,
         };
+      })
+      .addCase(getLocationByYandex.fulfilled, (state: TInitialClubState, action) => {
+        const { response } = action.payload;
+
+        const region =
+          response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.AdministrativeAreaName.toLocaleLowerCase();
+        const city =
+          response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.Locality.LocalityName.toLocaleLowerCase();
+
+        const cleanedRegion = region.replace(/ region$/, '');
+
+        if (region && city) {
+          state.location = {
+            place: {
+              region: cleanedRegion,
+              city,
+            },
+            isLoading: false,
+            isError: false,
+          };
+        }
+      })
+
+      .addCase(getLocationByYandex.pending, (state: TInitialClubState): void => {
+        state.location.isLoading = true;
+        state.location.isError = false;
+      })
+      .addCase(getLocationByYandex.rejected, (state: TInitialClubState): void => {
+        state.location = { ...initialState.location, isError: true };
       });
   },
 });
