@@ -1,12 +1,12 @@
-import { useAppDispatch } from '@hooks/index';
+import { useAppDispatch } from '@hooks';
 import { toggleSideBar } from '@redux/reducers';
 import { RxHamburgerMenu } from 'react-icons/rx';
 
 export const ButtonSidebar = () => {
   const dispatch = useAppDispatch();
 
-  const handleToggleSidebar = (state?: boolean) => {
-    dispatch(toggleSideBar(state as boolean));
+  const handleToggleSidebar = () => {
+    dispatch(toggleSideBar());
   };
 
   return (

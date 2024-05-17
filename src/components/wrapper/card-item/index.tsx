@@ -13,7 +13,7 @@ import { FaEye, FaRegComments } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 
 export const CardItem: React.FC<ICardItem> = React.memo((props) => {
-  const { club } = props;
+  const { club, showCount } = props;
 
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
@@ -72,15 +72,24 @@ export const CardItem: React.FC<ICardItem> = React.memo((props) => {
         </section>
         <section className={'h-[103px] border-b border-gray-600 pb-3'}>
           {timers.length !== 0 ? (
-            <p className={'mb-1 flex gap-1 text-sm'}>
-              <span className={'text-secondary text-[12px]'}>Զբաղվածության աստիճան։</span>
-              <span className={'underline'}>{calculateClubOccupancy(timers)}%</span>
-            </p>
+            <div>
+              <p className="mb-1 flex gap-1 text-sm">
+                <span className="text-secondary text-[12px]">Զբաղվածության աստիճան։</span>
+                <span className="underline">{calculateClubOccupancy(timers)}%</span>
+              </p>
+              {showCount ? (
+                <p className="mb-1 flex gap-1 text-sm text-text_success">
+                  <span className="text-[12px] font-bold">Համակարգիչների քանակը։</span>
+                  <span className="underline">{timers.length}</span>
+                </p>
+              ) : null}
+            </div>
           ) : null}
           <p
-            className={
-              'first-letter:text-secondary line-clamp-3 text-[12px] text-sm text-gray-600 first-letter:uppercase'
-            }
+            className={cn(
+              'first-letter:text-secondary line-clamp-3 text-[12px] text-sm text-gray-600 first-letter:uppercase',
+              showCount ? 'line-clamp2' : 'line-clamp-3',
+            )}
           >
             {description ? description : null}
           </p>

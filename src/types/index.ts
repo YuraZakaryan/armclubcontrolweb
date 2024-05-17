@@ -24,6 +24,7 @@ export interface TBreadcrumb extends TClassName {
 export type TCardList = {
   title?: string;
   clubs: Array<TClub>;
+  showCount?: boolean;
 };
 export type TRatingValue = {
   rating: Nullable<number>;
@@ -166,6 +167,7 @@ export interface IPagination {
 }
 export interface ICardItem {
   club: TClub;
+  showCount?: boolean;
 }
 export interface ICustomLoader extends TClassName {
   type?: LoadingType;

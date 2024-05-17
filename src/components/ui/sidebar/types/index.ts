@@ -38,7 +38,7 @@ export interface ISideBarItem extends TClassName, TMenuElement {
   iconSize?: number;
   cy?: string;
 }
-export interface ISidebarDropdown extends PropsWithChildren {
+export interface ISidebarDropdown extends PropsWithChildren, TClassName {
   title: string;
   state: boolean;
   handleClick?: () => void;

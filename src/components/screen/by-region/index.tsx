@@ -18,7 +18,6 @@ export const ByRegionClubScreen: React.FC = () => {
 
   const getRegionFromStorage: string | null = localStorage.getItem('region');
   const getCityFromStorage: string | null = localStorage.getItem('city');
-  const existInStorage: boolean = !!getRegionFromStorage || !!getCityFromStorage;
 
   const [place, setPlace] = React.useState<TPlace>({
     region: getRegionFromStorage || '',
@@ -36,12 +35,6 @@ export const ByRegionClubScreen: React.FC = () => {
       },
     );
   };
-
-  React.useEffect((): void => {
-    if (!existInStorage) {
-      handleLocation();
-    }
-  }, []);
 
   const onPageChange = (event: { first: number; rows: number }): void => {
     setCurrentPage(event.first / event.rows + 1);

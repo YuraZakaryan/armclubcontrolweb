@@ -53,14 +53,13 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    toggleSideBar: (state: TInitialUserState, action: PayloadAction<boolean>) => {
-      if (!action.payload) {
-        state.sideBar.isOpen = !state.sideBar.isOpen;
-      } else {
-        state.sideBar = {
-          isOpen: action.payload,
-        };
-      }
+    toggleSideBar: (state: TInitialUserState) => {
+      state.sideBar.isOpen = !state.sideBar.isOpen;
+    },
+    setSideBar: (state: TInitialUserState, action: PayloadAction<boolean>) => {
+      state.sideBar = {
+        isOpen: action.payload,
+      };
     },
     clearRegistrationErrorText: (state: TInitialUserState) => {
       state.registration.isErrorMessage = '';
@@ -204,4 +203,4 @@ const userSlice = createSlice({
   },
 });
 export const userReducer = userSlice.reducer;
-export const { toggleSideBar, clearRegistrationErrorText, logOut } = userSlice.actions;
+export const { toggleSideBar, setSideBar, clearRegistrationErrorText, logOut } = userSlice.actions;

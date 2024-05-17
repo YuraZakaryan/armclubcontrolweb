@@ -40,7 +40,7 @@ export const ByTimersClubScreen = () => {
       ) : (
         <>
           <Breadcrumb pageName="Բարձր վարկանիշով" />
-          <CardList clubs={items} />
+          <CardList clubs={items} showCount />
           {totalItems > DEFAULT_PER_PAGE ? (
             <Paginator
               first={perPage * (currentPage - 1)}

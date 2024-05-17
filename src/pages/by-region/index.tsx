@@ -6,6 +6,7 @@ export const ByRegionClub = () => {
     <>
       <Helmet>
         <title>Ըստ տարածաշրջանի</title>
+        <meta title="description" content="Փնտրել ակումբներ, ըստ տարածաշրջանի" />
       </Helmet>
       <ByRegionClubScreen />
     </>
