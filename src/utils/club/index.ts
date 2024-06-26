@@ -1,5 +1,6 @@
 import { regionCities } from '@components/screen/club/data';
 import { TRating, TTimer } from '@redux/types';
+import moment from 'moment-timezone'
 
 export function isClubClosed(openingTime: string, closingTime: string): boolean {
   const currentTime: Date = new Date();
@@ -94,3 +95,8 @@ export const minutesToTime = (minutes: number): string => {
   const remainingMinutes: number = minutes % 60;
   return `${hours < 10 ? '0' : ''}${hours}:${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
 };
+export const convertMomentDateToMinutes = (date: string) => {
+  if(date) {
+    return moment(date).format("HH:mm");
+  }
+}

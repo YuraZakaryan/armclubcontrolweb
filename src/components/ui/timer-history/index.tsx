@@ -3,7 +3,7 @@ import { CustomTable } from '@components/wrapper';
 import { CustomTableCell, CustomTableHeaderItem, CustomTableRow } from '@components/wrapper/custom-table/wrapper';
 import { TTimerHistories } from '@redux/types';
 import { ITimerHistory } from '@types';
-import { formattedPrice } from '@utils';
+import { convertMomentDateToMinutes, formattedPrice } from '@utils';
 import React from 'react';
 
 export const TimerHistory: React.FC<ITimerHistory> = React.memo((props) => {
@@ -35,9 +35,9 @@ export const TimerHistory: React.FC<ITimerHistory> = React.memo((props) => {
                 <CustomTableRow key={timer._id}>
                   <CustomTableCell>{index + 1}</CustomTableCell>
                   <CustomTableCell>{timer.title}</CustomTableCell>
-                  {/*<CustomTableCell>{timer.start.slice(0, 5)}</CustomTableCell>*/}
+                  <CustomTableCell>{!timer.start ? '--_--' : convertMomentDateToMinutes(timer.start)}</CustomTableCell>
                   <CustomTableCell>{timer.time}</CustomTableCell>
-                  <CustomTableCell>{timer.end.slice(0, 5)}</CustomTableCell>
+                  <CustomTableCell>{!timer.end ? '--_--' : convertMomentDateToMinutes(timer.end)}</CustomTableCell>
                   <CustomTableCell>{formattedPrice(timer.price)} դրամ</CustomTableCell>
                   <CustomTableCell>{Math.round(timer.finalPrice)} դրամ</CustomTableCell>
                 </CustomTableRow>

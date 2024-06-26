@@ -6,7 +6,7 @@ import { CustomTable } from '@components/wrapper';
 import { TimerPercent } from '@components/wrapper/custom-table/ui';
 import { CustomTableCell, CustomTableHeaderItem, CustomTableRow } from '@components/wrapper/custom-table/wrapper';
 import { TTimer } from '@redux/types';
-import { API_URL, formattedPrice } from '@utils';
+import { API_URL, convertMomentDateToMinutes, formattedPrice } from '@utils';
 import React from 'react';
 import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
@@ -102,7 +102,7 @@ export const ControlTimer: React.FC<IControlTimer> = React.memo((props) => {
                 <CustomTableRow key={timer._id}>
                   <CustomTableCell>{index + 1}</CustomTableCell>
                   <CustomTableCell> {timer.title}</CustomTableCell>
-                  <CustomTableCell>{!timer.start ? '--_--' : timer.start.slice(0, 5)}</CustomTableCell>
+                  <CustomTableCell>{!timer.start ? '--_--' : convertMomentDateToMinutes(timer.start)}</CustomTableCell>
                   <CustomTableCell>{!timer.defineTime ? '--_--' : timer.defineTime}</CustomTableCell>
                   <CustomTableCell>
                     <TimerPercent
@@ -113,7 +113,7 @@ export const ControlTimer: React.FC<IControlTimer> = React.memo((props) => {
                     />
                   </CustomTableCell>
                   <CustomTableCell>{!timer.remainingTime ? '--_--' : timer.remainingTime}</CustomTableCell>
-                  <CustomTableCell>{!timer.end ? '--_--' : timer.end.slice(0, 5)}</CustomTableCell>
+                  <CustomTableCell>{!timer.end ? '--_--' : convertMomentDateToMinutes(timer.end)}</CustomTableCell>
                   {!timer.price ? (
                     <CustomTableCell className="text-slate-400/90">N/A</CustomTableCell>
                   ) : (
