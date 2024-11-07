@@ -23,7 +23,7 @@ export const ConditionsDialog: React.FC<IConditionsDialog> = React.memo((props) 
             <ol className={'ml-6 mt-2 flex list-disc flex-col gap-2'}>
               <li className={'text-left'}>
                 Վիրավորել կայքի մյուս հաճախորդներին, նաև կայքի ադմինիստրացիային, ակումբի սեփականատիրոջը և աշխատողներին
-                (նույիսկ ինքդ քեզ)
+                (նույնիսկ ինքդ քեզ)
               </li>
               <li className={'text-left'}>
                 Հայհոյանք ցանկացած տեսակի ( նկատի ունենք կրճատ գրելաձև, աստղանիկներ, կետեր և դրանց նման նշաններ )

@@ -38,7 +38,7 @@ export const SettingsTimersTable: React.FC<ISettingsTimersTable> = (props) => {
               <CustomTableHeaderItem>ID</CustomTableHeaderItem>
               <CustomTableHeaderItem>Անվանումը</CustomTableHeaderItem>
               <CustomTableHeaderItem className="text-right">Փոփոխել</CustomTableHeaderItem>
-              <CustomTableHeaderItem className="w-[70px] text-right">Ջնջել</CustomTableHeaderItem>
+              <CustomTableHeaderItem className="w-[70px] !px-6 text-right">Ջնջել</CustomTableHeaderItem>
             </React.Fragment>
           }
           body={
@@ -47,10 +47,10 @@ export const SettingsTimersTable: React.FC<ISettingsTimersTable> = (props) => {
               <CustomTableRow key={timer._id}>
                 <CustomTableCell>{index + 1}</CustomTableCell>
                 <CustomTableCell>{timer.title}</CustomTableCell>
-                <CustomTableCell className="text-end">
+                <CustomTableCell className="!py-4 pr-1 text-end">
                   <EditTimer _id={timer._id} title={timer.title} dialogKey={timer._id} />
                 </CustomTableCell>
-                <CustomTableCell className="flex justify-end">
+                <CustomTableCell className="flex justify-end !py-4">
                   <ConfirmDeleteDialog
                     _id={timer._id}
                     label="Ժամանակաչափ"

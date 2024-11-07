@@ -10,20 +10,10 @@ import {
   DialogTitle,
 } from '@components/shadcn/ui/dialog';
 import { SpecialWord } from '@components/wrapper';
-import { formattedPrice, minutesToTime, timeToMinutes } from '@utils';
 import React from 'react';
 
 export const DialogFinish: React.FC<IDialogFinish> = React.memo((props) => {
-  const { openFinalDialog, setOpenFinalDialog, endedTimer } = props;
-
-  const differenceDefineAndRemaining: number = endedTimer.defineTime
-    ? timeToMinutes(endedTimer.defineTime) - timeToMinutes(endedTimer.remainingTime)
-    : 0;
-
-  const isManuallyStopped: string =
-    endedTimer.manuallyStopped && endedTimer.defineTime
-      ? minutesToTime(differenceDefineAndRemaining)
-      : endedTimer.remainingTime;
+  const { openFinalDialog, setOpenFinalDialog, timer } = props;
 
   return (
     <Dialog open={openFinalDialog} onOpenChange={setOpenFinalDialog}>
@@ -33,24 +23,19 @@ export const DialogFinish: React.FC<IDialogFinish> = React.memo((props) => {
           <DialogDescription>
             <div className={'mt-2 flex w-full flex-col items-center gap-2'}>
               <section className={'text-secondary text-xl'}>
-                Համակարգիչ -<SpecialWord>{endedTimer?.title ? endedTimer?.title : 'օր․ PS5 առաջին'}</SpecialWord>
-                <span className={'ml-1 text-black'}>[{endedTimer?._id ? endedTimer?.index : 'օր․ 1'}]</span>
+                Համակարգիչ -<SpecialWord>{timer?.title ? timer?.title : 'օր․ PS5 առաջին'}</SpecialWord>
               </section>
               <section className={'text-left'}>
                 Ժամանակը։
                 <SpecialWord>
-                  {endedTimer?.remainingTime
-                    ? endedTimer?.remainingTime != '00:00'
-                      ? isManuallyStopped
-                      : endedTimer?.defineTime
-                    : 'օր․ 00:10'}{' '}
+                  {timer?.playedTime}
                   րոպե
                 </SpecialWord>
               </section>
               <section>
                 Հաճախորդը պետք է ձեզ տա։
                 <SpecialWord>
-                  {!endedTimer?.pricePerHour ? 'օր․ 500' : formattedPrice(Math.round(endedTimer?.pricePerHour))}
+                  {timer?.price}
                   &nbsp;դրամ
                 </SpecialWord>
               </section>

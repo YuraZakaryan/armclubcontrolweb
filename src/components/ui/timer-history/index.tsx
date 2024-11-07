@@ -33,7 +33,7 @@ export const TimerHistory: React.FC<ITimerHistory> = React.memo((props) => {
               Array.isArray(timerHistories) &&
               timerHistories.map((timer: TTimerHistories, index: number) => (
                 <CustomTableRow key={timer._id}>
-                  <CustomTableCell>{index + 1}</CustomTableCell>
+                  <CustomTableCell className="py-2">{index + 1}</CustomTableCell>
                   <CustomTableCell>{timer.title}</CustomTableCell>
                   <CustomTableCell>{!timer.start ? '--_--' : convertMomentDateToMinutes(timer.start)}</CustomTableCell>
                   <CustomTableCell>{timer.time}</CustomTableCell>

@@ -1,4 +1,4 @@
-import { TTimer } from '@redux/types';
+import { TFinishedTimer } from '@redux/types';
 
 export interface IControlTimer {
   clubId: string;
@@ -6,7 +6,7 @@ export interface IControlTimer {
   isLoading: boolean;
 }
 export interface IControlNotify {
-  endedTimer: TTimer;
+  timer: TFinishedTimer | null;
 }
 export type TNewTimerForm = {
   title: string;
@@ -47,5 +47,5 @@ export interface IDialogStop {
 export interface IDialogFinish {
   openFinalDialog: boolean;
   setOpenFinalDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  endedTimer: TTimer;
-};
+  timer: TFinishedTimer | null;
+}

@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from 'react';
 
 export const CustomTableHeaderItem: React.FC<PropsWithChildren<TClassName>> = React.memo(({ children, className }) => {
   return (
-    <th scope="col" className={cn('px-6 py-3 text-center', className)}>
+    <th scope="col" className={cn('px-1 py-3 text-center text-[10px]', className)}>
       {children}
     </th>
   );

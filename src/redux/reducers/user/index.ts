@@ -45,7 +45,7 @@ const initialState: TInitialUserState = {
     isError: false,
   },
   sideBar: {
-    isOpen: false,
+    isOpen: true,
   },
 };
 

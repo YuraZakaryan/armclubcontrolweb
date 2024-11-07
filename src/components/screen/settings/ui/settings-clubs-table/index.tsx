@@ -33,7 +33,7 @@ export const SettingsClubsTable = () => {
           <CustomTableHeaderItem>ID</CustomTableHeaderItem>
           <CustomTableHeaderItem>Անվանումը</CustomTableHeaderItem>
           <CustomTableHeaderItem className="text-right">Փոփոխել</CustomTableHeaderItem>
-          <CustomTableHeaderItem className="w-[70px] text-right">Ջնջել</CustomTableHeaderItem>
+          <CustomTableHeaderItem className="w-[70px] !px-6 text-right">Ջնջել</CustomTableHeaderItem>
         </React.Fragment>
       }
       body={
@@ -42,10 +42,10 @@ export const SettingsClubsTable = () => {
           <CustomTableRow key={club._id}>
             <CustomTableCell>{index + 1}</CustomTableCell>
             <CustomTableCell>{club.title}</CustomTableCell>
-            <CustomTableCell>
+            <CustomTableCell className="!py-4 pr-1">
               <ClubDialog club={club} dialogKey={club._id} customIcon={FaEdit} className="relative right-4" />
             </CustomTableCell>
-            <CustomTableCell className="flex justify-end">
+            <CustomTableCell className="pr-1">
               <ConfirmDeleteDialog
                 _id={club._id}
                 label="Ակումբ"

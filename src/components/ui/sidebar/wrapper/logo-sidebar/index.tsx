@@ -1,14 +1,22 @@
 import Logo from '@assets/logo/logo.png';
 import type { ILogoSideBar } from '@components/ui/sidebar/types';
+import { useAppDispatch } from '@hooks/redux';
+import { toggleSideBar } from '@redux/reducers';
 import { Image } from 'primereact/image';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const LogoSideBar: React.FC<ILogoSideBar> = React.memo((props) => {
-  const { triggerRef, toggleSideBar, sidebarOpen } = props;
+  const { triggerRef, sidebarOpen } = props;
+
+  const dispatch = useAppDispatch();
+
+  const handleToggleSidebar = () => {
+    dispatch(toggleSideBar());
+  };
 
   return (
-    <section className="flex items-center gap-2 py-5 pl-7 lg:py-6 tablet-max:justify-between">
+    <section className="flex items-center justify-around gap-2 py-5 pl-7 lg:py-6">
       <Link to="/">
         <div className={'flex flex-col font-bold text-text'}>
           <Image
@@ -23,10 +31,10 @@ export const LogoSideBar: React.FC<ILogoSideBar> = React.memo((props) => {
 
       <button
         ref={triggerRef}
-        onClick={toggleSideBar}
+        onClick={handleToggleSidebar}
         aria-controls="sidebar"
         aria-expanded={sidebarOpen}
-        className="block lg:hidden"
+        className="block"
       >
         <svg
           className="fill-current"

@@ -1,5 +1,5 @@
-import { regionCities } from '@components/screen/club/data';
-import { TRating, TTimer } from '@redux/types';
+import { regionCities } from '@components/screen/club/data'
+import { TPausePeriod, TRating, TTimer } from '@redux/types'
 import moment from 'moment-timezone'
 
 export function isClubClosed(openingTime: string, closingTime: string): boolean {
@@ -26,25 +26,65 @@ export function calculateClubOccupancy(timers: Array<TTimer>): number {
 
   return Math.round((activeTimers / totalTimers) * 100);
 }
-export const calculatePercentTimer = (totalTime: string, remainingTime: string): number => {
-  if (totalTime === null || remainingTime === null) {
-    return 100;
+
+export const calculatePercentTimer = (
+  start: string,
+  end: string,
+  pausePeriods: TPausePeriod[],
+): number => {
+  const startTime = moment(start);
+  const endTime = moment(end);
+  const now = moment();
+
+  // Если таймер не активен или уже закончился
+  if (now.isBefore(startTime) || now.isAfter(endTime)) {
+    return 0;
   }
-  const totalParts: string[] = totalTime.split(':');
-  const remainingParts: string[] = remainingTime.split(':');
 
-  const totalHours: number = parseInt(totalParts[0], 10);
-  const totalMinutesValue: number = parseInt(totalParts[1], 10);
-  const remainingHours: number = parseInt(remainingParts[0], 10);
-  const remainingMinutes: number = parseInt(remainingParts[1], 10);
+  // Общая продолжительность времени без учета пауз
+  const totalDuration = endTime.diff(startTime);
 
-  const totalMinutes: number = totalHours * 60 + totalMinutesValue;
-  const remainingTotalMinutes = remainingHours * 60 + remainingMinutes;
+  // Вычисление прошедшего времени
+  let elapsedTime = now.diff(startTime);
 
-  const percentage: number = ((totalMinutes - remainingTotalMinutes) / totalMinutes) * 100;
+  // Вычисление времени пауз
+  let pauseTime = 0;
+  for (const pause of pausePeriods) {
+    const pauseStart = moment(pause.start);
+    const pauseEnd = moment(pause.end);
+    if (pauseEnd.isBefore(startTime) || pauseStart.isAfter(endTime)) {
+      continue;
+    }
+    pauseTime += Math.min(pauseEnd.diff(pauseStart), endTime.diff(startTime));
+  }
 
-  return Math.round(percentage);
+  // Корректировка прошедшего времени на время пауз
+  elapsedTime -= pauseTime;
+
+  // Вычисление процента и округление до двух знаков после запятой
+  const percent = Math.min(100, (elapsedTime / totalDuration) * 100);
+  return parseFloat(percent.toFixed(2)); // Округление
 };
+
+export const calculateRemainingTime = (start: string, end: string): number => {
+  const now = moment();
+  const startTime = moment(start);
+  const endTime = moment(end);
+
+  if (now.isBefore(startTime)) {
+    return 0;
+  }
+
+  if (now.isAfter(endTime)) {
+    return 0;
+  }
+
+  const totalDuration = endTime.diff(startTime);
+  const elapsedDuration = now.diff(startTime);
+
+  return totalDuration - elapsedDuration;
+};
+
 export const calculateAverageRating = (ratings: Array<TRating>): number => {
   if (ratings.length === 0) {
     return 0;
@@ -96,7 +136,7 @@ export const minutesToTime = (minutes: number): string => {
   return `${hours < 10 ? '0' : ''}${hours}:${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
 };
 export const convertMomentDateToMinutes = (date: string) => {
-  if(date) {
-    return moment(date).format("HH:mm");
+  if (date) {
+    return moment(date).format('HH:mm');
   }
-}
+};

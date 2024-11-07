@@ -6,15 +6,12 @@ import { fetchClubThunk } from '@redux/http';
 import { TClub } from '@redux/types';
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export const ClubControlScreen = () => {
   const { clubId } = useParams();
 
-  const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.user);
   const { club } = useAppSelector((state) => state.club);
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -26,15 +23,6 @@ export const ClubControlScreen = () => {
   React.useEffect(() => {
     fetchClub();
   }, []);
-
-  React.useEffect(() => {
-    if (user) {
-      const foundClub = user?.clubs.find((club) => club._id === clubId);
-      if (!foundClub) {
-        navigate('/');
-      }
-    }
-  }, [user]);
 
   return (
     <Main>

@@ -5,7 +5,6 @@ import { IconType } from 'react-icons';
 export interface ILogoSideBar {
   triggerRef: React.RefObject<HTMLButtonElement>;
   sidebarOpen: boolean;
-  toggleSideBar: () => void;
 }
 
 export interface ISidebar {

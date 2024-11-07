@@ -3,6 +3,7 @@ import { TimerPercent } from '@components/wrapper/custom-table/ui';
 import { CustomTableCell, CustomTableHeaderItem, CustomTableRow } from '@components/wrapper/custom-table/wrapper';
 import { useAppSelector } from '@hooks/redux';
 import { TTimer } from '@redux/types';
+import { convertMomentDateToMinutes } from '@utils/club';
 import React from 'react';
 
 export const ClubTimers = () => {
@@ -33,14 +34,17 @@ export const ClubTimers = () => {
               <TimerPercent
                 isActive={timer.isActive}
                 isInfinite={timer.isInfinite}
-                remainingTime={timer.remainingTime}
-                defineTime={timer.defineTime}
+                start={timer.start}
+                end={timer.end}
+                isPause={timer.paused}
+                pausePeriods={timer.pausePeriods}
+                timerId={timer._id}
               />
             </CustomTableCell>
             <CustomTableCell>
               {!timer.remainingTime ? '--_--' : timer.isInfinite ? 'Անորոշ' : timer.remainingTime}
             </CustomTableCell>
-            <CustomTableCell>{!timer.end ? '--_--' : timer.end.slice(0, 5)}</CustomTableCell>
+            <CustomTableCell>{!timer.end ? '--:--:--' : convertMomentDateToMinutes(timer.end)}</CustomTableCell>
             <CustomTableCell>{!timer.waitingCount ? 0 : timer.waitingCount}</CustomTableCell>
           </CustomTableRow>
         ))

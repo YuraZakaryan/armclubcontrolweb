@@ -11,7 +11,7 @@ import {
 import { TSideBarDropdown } from '@components/ui/sidebar/types';
 import { LogoSideBar, SidebarDropdown, SideBarMenu } from '@components/ui/sidebar/wrapper';
 import { useAppDispatch, useAppSelector } from '@hooks';
-import { setSideBar, toggleSideBar } from '@redux/reducers';
+import { setSideBar } from '@redux/reducers';
 import cn from 'classnames';
 import React from 'react';
 
@@ -23,14 +23,10 @@ export const Sidebar = () => {
     categories: false,
   });
 
-  const { isOpen } = sideBar;
+  const isOpen = sideBar.isOpen;
 
   const trigger = React.useRef<HTMLButtonElement | null>(null);
   const sidebar = React.useRef<HTMLDivElement>(null);
-
-  const handleToggleSidebar = () => {
-    dispatch(toggleSideBar());
-  };
 
   const handleSetSidebar = (state: boolean) => {
     dispatch(setSideBar(state));
@@ -51,23 +47,26 @@ export const Sidebar = () => {
       if (!isOpen || sidebar.current.contains(target as Node) || trigger.current.contains(target as Node)) return;
       handleSetSidebar(false);
     };
-    document.addEventListener('click', clickHandler);
+
+    if (window.innerWidth < 1280) {
+      document.addEventListener('click', clickHandler);
+    }
+
     return () => document.removeEventListener('click', clickHandler);
-  });
+  }, [isOpen]);
 
   const isLoading = me.isLoading as boolean;
-  console.log(isOpen);
 
   return (
     <aside
       ref={sidebar}
       className={cn(
-        `absolute left-0 top-0 z-[9999] flex h-full w-full max-w-[280px] flex-col border-r bg-primary duration-300 ease-linear laptop-hd-min:fixed laptop-hd-min:translate-x-0`,
+        `absolute left-0 top-0 z-[9999] flex h-full w-full max-w-[280px] flex-col border-r bg-primary duration-300 ease-linear laptop-hd-min:fixed`,
         isOpen ? 'translate-x-0' : '-translate-x-full',
       )}
     >
       <div className="flex h-full flex-col justify-between text-text">
-        <LogoSideBar triggerRef={trigger} sidebarOpen={isOpen} toggleSideBar={handleToggleSidebar} />
+        <LogoSideBar triggerRef={trigger} sidebarOpen={isOpen} />
         <nav className="flex h-full flex-col justify-between border-t pl-7">
           {isLoading ? (
             <>

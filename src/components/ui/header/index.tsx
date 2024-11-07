@@ -17,6 +17,6 @@ export const Header = () => {
         </div>
         <Search />
       </section>
-    </header>
+    </header> 
   );
 };

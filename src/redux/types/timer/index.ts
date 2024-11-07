@@ -14,13 +14,26 @@ export interface TTimer {
   price: number | null;
   waitingCount: number | null;
   manuallyStopped: boolean;
-  pricePerHour: number;
-  expired: boolean;
+  pausePeriods: TPausePeriod[];
   club: string;
   author: string;
   createdAt: string;
   updatedAt: string;
 }
+
+export type TPausePeriod = {
+  start: string;
+  end: string | null;
+};
+
+export type TFinishedTimer = {
+  title: string;
+  playedTime: string;
+  price: number;
+  pausePeriods: TPausePeriod[];
+  _id: string;
+};
+
 export type TTimerHistories = {
   _id: string;
   title: string;

@@ -1,24 +1,27 @@
 import { IControlTimer } from '@components/screen/club-control/types';
 import { DialogFinish, TimerEditButtons } from '@components/screen/club-control/ui';
-import { ControlNotify } from '@components/screen/club-control/wrapper';
 import { Loader } from '@components/ui';
 import { CustomTable } from '@components/wrapper';
-import { TimerPercent } from '@components/wrapper/custom-table/ui';
+import { TimeRemaining, TimerPercent } from '@components/wrapper/custom-table/ui';
 import { CustomTableCell, CustomTableHeaderItem, CustomTableRow } from '@components/wrapper/custom-table/wrapper';
-import { TTimer } from '@redux/types';
+import { TFinishedTimer, TTimer } from '@redux/types';
 import { API_URL, convertMomentDateToMinutes, formattedPrice } from '@utils';
 import React from 'react';
 import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
+import { ControlNotify } from '../../wrapper/control-notify';
 import { AddNewTimer } from '../add-new-timer';
 
 export const ControlTimer: React.FC<IControlTimer> = React.memo((props) => {
   const { clubId, setIsLoading, isLoading } = props;
-  const [endedTimer, setEndedTimer] = React.useState<TTimer | null>(null);
+  const [endedTimer, setEndedTimer] = React.useState<TFinishedTimer[] | null>(null);
   const [openFinalDialog, setOpenFinalDialog] = React.useState<boolean>(false);
   const [timers, setTimers] = React.useState<TTimer[]>([]);
+  const [notificationQueue, setNotificationQueue] = React.useState<TFinishedTimer[]>([]);
+  const [isNotifying, setIsNotifying] = React.useState<boolean>(false);
+  const [zeroRemainingTimers, setZeroRemainingTimers] = React.useState<Set<string>>(new Set());
 
-  React.useEffect((): void => {
+  React.useEffect(() => {
     const socket = io(API_URL, {
       query: {
         club: clubId,
@@ -36,33 +39,58 @@ export const ControlTimer: React.FC<IControlTimer> = React.memo((props) => {
         console.error('Error parsing timers:', error);
       }
     });
+
+    socket.on('timer-finished', (timer: TFinishedTimer) => {
+      try {
+        // @ts-ignore
+        const parsedTimer = JSON.parse(timer);
+        setEndedTimer((prev) => (prev ? [...prev, parsedTimer] : [parsedTimer]));
+        setZeroRemainingTimers((prev) => {
+          const updatedSet = new Set(prev);
+          updatedSet.delete(parsedTimer._id);
+          return updatedSet;
+        });
+        if (openFinalDialog) {
+          setNotificationQueue((prev) => [...prev, parsedTimer]);
+        }
+      } catch (error) {
+        console.error('Error updating timers:', error);
+      }
+    });
+
+    return () => {
+      socket.off('timer-finished');
+      socket.disconnect();
+    };
   }, [clubId]);
 
-  React.useEffect((): void => {
-    const timersWithZeroRemaining: TTimer[] = timers.filter((timer: TTimer) => timer.expired);
-
-    if (timersWithZeroRemaining.length > 0) {
-      timersWithZeroRemaining.forEach((timer: TTimer, index: number): void => {
-        const timerIndex = timers.indexOf(timer) + 1;
-
-        if (openFinalDialog) {
-          toast(<ControlNotify endedTimer={timer} />, {
-            autoClose: 50000,
-            pauseOnHover: true,
-          });
-        } else {
-          setTimeout(() => {
-            if (index === 0) {
-              setEndedTimer({ ...timer, index: timerIndex });
-              setOpenFinalDialog(true);
-            } else {
-              toast(<ControlNotify endedTimer={timer} />);
-            }
-          }, 2000 * index);
-        }
+  React.useEffect(() => {
+    if (!openFinalDialog && endedTimer && endedTimer.length > 0) {
+      setOpenFinalDialog(true);
+    } else if (openFinalDialog && notificationQueue.length > 0) {
+      const [currentNotification, ...remainingQueue] = notificationQueue;
+      setNotificationQueue(remainingQueue);
+      setIsNotifying(true);
+      toast(<ControlNotify timer={currentNotification} />, {
+        autoClose: 50000,
+        pauseOnHover: true,
+        onClose: () => setIsNotifying(false),
       });
     }
-  }, [timers]);
+  }, [endedTimer, openFinalDialog, notificationQueue, isNotifying]);
+
+  React.useEffect(() => {
+    console.log(zeroRemainingTimers);
+  }, [zeroRemainingTimers]);
+
+  const handleCloseDialog = () => {
+    setOpenFinalDialog(false);
+    setEndedTimer((prev) => (prev && prev.length > 1 ? prev.slice(0, -1) : []));
+  };
+
+  const handleTimeUp = (timerId: string) => {
+    setZeroRemainingTimers((prev) => new Set(prev).add(timerId));
+  };
 
   return (
     <React.Fragment>
@@ -71,11 +99,11 @@ export const ControlTimer: React.FC<IControlTimer> = React.memo((props) => {
       ) : (
         <section>
           <AddNewTimer />
-          {endedTimer && (
+          {openFinalDialog && endedTimer && endedTimer.length > 0 && (
             <DialogFinish
               openFinalDialog={openFinalDialog}
-              setOpenFinalDialog={setOpenFinalDialog}
-              endedTimer={endedTimer}
+              setOpenFinalDialog={handleCloseDialog}
+              timer={endedTimer[endedTimer.length - 1]}
             />
           )}
           <CustomTable
@@ -99,21 +127,39 @@ export const ControlTimer: React.FC<IControlTimer> = React.memo((props) => {
             body={
               Array.isArray(timers) &&
               timers.map((timer: TTimer, index: number) => (
-                <CustomTableRow key={timer._id}>
+                <CustomTableRow key={timer._id} isLoading={zeroRemainingTimers.has(timer._id)}>
                   <CustomTableCell>{index + 1}</CustomTableCell>
                   <CustomTableCell> {timer.title}</CustomTableCell>
-                  <CustomTableCell>{!timer.start ? '--_--' : convertMomentDateToMinutes(timer.start)}</CustomTableCell>
-                  <CustomTableCell>{!timer.defineTime ? '--_--' : timer.defineTime}</CustomTableCell>
+                  <CustomTableCell className="whitespace-nowrap">
+                    {!timer.start ? '--:--:--' : convertMomentDateToMinutes(timer.start)}
+                  </CustomTableCell>
+                  <CustomTableCell className="whitespace-nowrap">
+                    {!timer.defineTime ? '--:--:--' : timer.defineTime}
+                  </CustomTableCell>
                   <CustomTableCell>
                     <TimerPercent
+                      timerId={timer._id}
                       isActive={timer.isActive}
                       isInfinite={timer.isInfinite}
-                      remainingTime={timer.remainingTime}
-                      defineTime={timer.defineTime}
+                      isPause={timer.paused}
+                      pausePeriods={timer.pausePeriods}
+                      start={timer.start}
+                      end={timer.end}
+                      onTimeUp={handleTimeUp}
                     />
                   </CustomTableCell>
-                  <CustomTableCell>{!timer.remainingTime ? '--_--' : timer.remainingTime}</CustomTableCell>
-                  <CustomTableCell>{!timer.end ? '--_--' : convertMomentDateToMinutes(timer.end)}</CustomTableCell>
+                  <CustomTableCell className="whitespace-nowrap">
+                    <TimeRemaining
+                      start={timer.start}
+                      end={timer.end}
+                      isActive={timer.isActive}
+                      isInfinite={timer.isInfinite}
+                      isPause={timer.paused}
+                    />
+                  </CustomTableCell>
+                  <CustomTableCell className="whitespace-nowrap">
+                    {!timer.end ? '--:--:--' : convertMomentDateToMinutes(timer.end)}
+                  </CustomTableCell>
                   {!timer.price ? (
                     <CustomTableCell className="text-slate-400/90">N/A</CustomTableCell>
                   ) : (
